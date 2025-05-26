@@ -619,8 +619,61 @@
         let currentFacingMode = 'user'; // 'user' for front, 'environment' for back
         let flashEnabled = false;
         let currentMode = 'photo';
-        let photos = JSON.parse(localStorage.getItem('camera-photos')) || [];
         let currentPreviewId = null;
+
+        // IndexedDB setup
+        class PhotoDB {
+            constructor() {
+                this.dbName = 'PhotosDB';
+                this.version = 1;
+                this.db = null;
+            }
+        
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve();
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains('photos')) {
+                            const store = db.createObjectStore('photos', { keyPath: 'id' });
+                            store.createIndex('timestamp', 'timestamp', { unique: false });
+                        }
+                    };
+                });
+            }
+        
+            async savePhoto(photo) {
+                const transaction = this.db.transaction(['photos'], 'readwrite');
+                const store = transaction.objectStore('photos');
+                return store.put(photo);
+            }
+        
+            async getAllPhotos() {
+                const transaction = this.db.transaction(['photos'], 'readonly');
+                const store = transaction.objectStore('photos');
+                const index = store.index('timestamp');
+                return new Promise((resolve, reject) => {
+                    const request = index.getAll();
+                    request.onsuccess = () => resolve(request.result.reverse()); // Most recent first
+                    request.onerror = () => reject(request.error);
+                });
+            }
+        
+            async deletePhoto(id) {
+                const transaction = this.db.transaction(['photos'], 'readwrite');
+                const store = transaction.objectStore('photos');
+                return store.delete(id);
+            }
+        }
+        
+        const photoDB = new PhotoDB();
         
         // Tab functionality
         tabButtons.forEach(button => {
@@ -678,34 +731,34 @@
         }
 
         // Capture photo
-        function capturePhoto() {
+        async function capturePhoto() {
             if (!currentStream) return;
-
-            // Create canvas to capture frame
+        
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
             canvas.width = cameraFeed.videoWidth;
             canvas.height = cameraFeed.videoHeight;
-            
-            // Draw current frame
             ctx.drawImage(cameraFeed, 0, 0);
             
-            // Convert to blob
-            canvas.toBlob(blob => {
+            canvas.toBlob(async (blob) => {
                 const photo = {
                     id: Date.now(),
                     blob: blob,
                     url: URL.createObjectURL(blob),
-                    timestamp: new Date().toISOString()
+                    timestamp: Date.now()
                 };
                 
-                photos.unshift(photo);
-                savePhotos();
-                
-                // Show flash effect
-                showFlashEffect();
-                
+                try {
+                    await photoDB.savePhoto(photo);
+                    photos.unshift(photo);
+                    showFlashEffect();
+                    
+                    // Notify photos app
+                    window.postMessage({ type: 'photoAdded', photo: photo }, window.location.origin);
+                } catch (error) {
+                    console.error('Error saving photo:', error);
+                }
             }, 'image/jpeg', 0.8);
         }
 
@@ -729,21 +782,21 @@
             flashIcon.textContent = flashEnabled ? 'flash_on' : 'flash_off';
         }
 
-        // Save photos to localStorage (URLs only)
-        function savePhotos() {
-            const photosToSave = photos.map(photo => ({
-                id: photo.id,
-                url: photo.url,
-                timestamp: photo.timestamp
-            }));
-            localStorage.setItem('camera-photos', JSON.stringify(photosToSave));
-        }
-
         // Event listeners
         enableCameraBtn.addEventListener('click', initCamera);
         captureBtn.addEventListener('click', capturePhoto);
         flipCameraBtn.addEventListener('click', flipCamera);
         flashBtn.addEventListener('click', toggleFlash);
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await photoDB.init();
+                photos = await photoDB.getAllPhotos();
+            } catch (error) {
+                console.error('Error initializing database:', error);
+                photos = [];
+            }
+        });
 
         // Theme synchronization
         document.addEventListener('DOMContentLoaded', () => {
