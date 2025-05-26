@@ -589,10 +589,10 @@
                 <!-- Camera controls moved inside camera view at bottom -->
                 <div class="camera-controls">
                     <button class="control-btn" id="flip-camera-btn" title="Flip Camera">
-                        <span class="material-symbols-rounded">flip_camera_ios</span>
+                        <span class="material-symbols-rounded">flip_camera_android</span>
                     </button>
                     <button class="control-btn capture-btn" id="capture-btn" title="Take Photo">
-                        <span class="material-symbols-rounded">photo_camera</span>
+                        <span class="material-symbols-rounded">radio_button_unchecked</span>
                     </button>
                     <button class="control-btn" id="flash-btn" title="Flash">
                         <span class="material-symbols-rounded">flash_off</span>
@@ -675,9 +675,9 @@
                     // Update capture button icon
                     const captureIcon = captureBtn.querySelector('.material-symbols-rounded');
                     if (currentMode === 'video') {
-                        captureIcon.textContent = 'videocam';
+                        captureIcon.textContent = 'radio_button_checked';
                     } else {
-                        captureIcon.textContent = 'photo_camera';
+                        captureIcon.textContent = 'radio_button_unchecked';
                     }
                     
                     // Show camera content
