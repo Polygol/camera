@@ -80,7 +80,7 @@
            flex-direction: column;
            justify-content: center;
            align-items: center;
-           padding: 20px;
+           padding: 0;
            padding-top: 80px;
            user-select: none;
            transition: background-color 0.3s, color 0.3s;
@@ -90,8 +90,8 @@
         
         .container {
            width: 100%;
-           max-width: 600px;
-           height: calc(100vh - 100px);
+           max-width: none;
+           height: calc(100vh - 80px);
            display: flex;
            flex-direction: column;
         }
@@ -180,11 +180,13 @@
         .camera-view {
             position: relative;
             flex: 1;
-            background-color: var(--search-background);
-            border-radius: 25px;
+            background-color: #000;
+            border-radius: 0;
             overflow: hidden;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 20px;
+            border: none;
+            margin-bottom: 0;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
         }
         
         .camera-feed {
@@ -192,7 +194,7 @@
             height: 100%;
             object-fit: cover;
             background-color: #000;
-            border-radius: 25px;
+            border-radius: 0;
         }
         
         .camera-placeholder {
@@ -240,14 +242,19 @@
         
         /* Camera Controls */
         .camera-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: var(--search-background);
-            border-radius: 25px;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 20px;
+            padding: 30px 50px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+            border-radius: 0;
+            border: none;
+            margin-bottom: 0;
+            backdrop-filter: blur(10px);
         }
         
         .control-btn {
@@ -279,10 +286,7 @@
         
         /* Mode Selection */
         .mode-selection {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            display: none;
         }
         
         .mode-btn {
@@ -511,11 +515,25 @@
            transform: scale(0.98) !important;
            transition: none !important;
         }
-
+        
         @media (max-width: 480px) {
             .tab-container {
                 height: 130px;
                 align-content: flex-end;
+            }
+            
+            .camera-controls {
+                padding: 20px 30px;
+            }
+            
+            .control-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .capture-btn {
+                width: 60px;
+                height: 60px;
             }
             
             .gallery-grid {
@@ -528,7 +546,8 @@
 <body>
     <div class="container">
         <div class="tab-container">
-            <button class="tab-btn active" data-tab="camera"><span class="material-symbols-rounded">photo_camera</span>Camera</button>
+            <button class="tab-btn" data-tab="camera" data-mode="photo"><span class="material-symbols-rounded">photo_camera</span>Photo</button>
+            <button class="tab-btn active" data-tab="camera" data-mode="video"><span class="material-symbols-rounded">videocam</span>Video</button>
             <button class="tab-btn" data-tab="gallery"><span class="material-symbols-rounded">photo_library</span>Gallery</button>
         </div>
         
@@ -544,23 +563,19 @@
                     </div>
                 </div>
                 <div class="flash-effect" id="flash-effect"></div>
-            </div>
-            
-            <div class="mode-selection">
-                <button class="mode-btn active" data-mode="photo">Photo</button>
-                <button class="mode-btn" data-mode="video">Video</button>
-            </div>
-            
-            <div class="camera-controls">
-                <button class="control-btn" id="flip-camera-btn" title="Flip Camera">
-                    <span class="material-symbols-rounded">flip_camera_ios</span>
-                </button>
-                <button class="control-btn capture-btn" id="capture-btn" title="Take Photo">
-                    <span class="material-symbols-rounded">photo_camera</span>
-                </button>
-                <button class="control-btn" id="flash-btn" title="Flash">
-                    <span class="material-symbols-rounded">flash_off</span>
-                </button>
+                
+                <!-- Camera controls moved inside camera view at bottom -->
+                <div class="camera-controls">
+                    <button class="control-btn" id="flip-camera-btn" title="Flip Camera">
+                        <span class="material-symbols-rounded">flip_camera_ios</span>
+                    </button>
+                    <button class="control-btn capture-btn" id="capture-btn" title="Take Photo">
+                        <span class="material-symbols-rounded">photo_camera</span>
+                    </button>
+                    <button class="control-btn" id="flash-btn" title="Flash">
+                        <span class="material-symbols-rounded">flash_off</span>
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -631,30 +646,25 @@
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 
-                tabContents.forEach(content => content.classList.remove('active'));
-                
-                const tabId = button.dataset.tab + '-content';
-                document.getElementById(tabId).classList.add('active');
-                
-                if (button.dataset.tab === 'gallery') {
+                // Handle camera mode selection
+                if (button.dataset.tab === 'camera') {
+                    currentMode = button.dataset.mode;
+                    
+                    // Update capture button icon
+                    const captureIcon = captureBtn.querySelector('.material-symbols-rounded');
+                    if (currentMode === 'video') {
+                        captureIcon.textContent = 'videocam';
+                    } else {
+                        captureIcon.textContent = 'photo_camera';
+                    }
+                    
+                    // Show camera content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById('camera-content').classList.add('active');
+                } else if (button.dataset.tab === 'gallery') {
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById('gallery-content').classList.add('active');
                     renderGallery();
-                }
-            });
-        });
-
-        // Mode selection
-        modeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                modeButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                currentMode = button.dataset.mode;
-                
-                // Update capture button icon
-                const captureIcon = captureBtn.querySelector('.material-symbols-rounded');
-                if (currentMode === 'video') {
-                    captureIcon.textContent = 'videocam';
-                } else {
-                    captureIcon.textContent = 'photo_camera';
                 }
             });
         });
