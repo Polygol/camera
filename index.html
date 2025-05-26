@@ -741,25 +741,30 @@
             canvas.height = cameraFeed.videoHeight;
             ctx.drawImage(cameraFeed, 0, 0);
             
-            canvas.toBlob(async (blob) => {
-                const photo = {
-                    id: Date.now(),
-                    blob: blob,
-                    url: URL.createObjectURL(blob),
-                    timestamp: Date.now()
-                };
-                
-                try {
-                    await photoDB.savePhoto(photo);
-                    photos.unshift(photo);
-                    showFlashEffect();
-                    
-                    // Notify photos app
-                    window.postMessage({ type: 'photoAdded', photo: photo }, window.location.origin);
-                } catch (error) {
-                    console.error('Error saving photo:', error);
-                }
-            }, 'image/jpeg', 0.8);
+          canvas.toBlob(async (blob) => {
+            const photo = {
+              id: Date.now(),
+              blob,
+              url: URL.createObjectURL(blob),
+              timestamp: Date.now()
+            };
+        
+            try {
+              await photoDB.savePhoto(photo);
+              photos.unshift(photo);
+              showFlashEffect();
+        
+              // tell the parent to forward to Moments
+              window.parent.postMessage({
+                targetApp:   'Moments',
+                type:        'photoAdded',
+                photo
+              }, window.location.origin);
+        
+            } catch (error) {
+              console.error('Error saving photo:', error);
+            }
+          }, 'image/jpeg', 0.8);
         }
 
         function showFlashEffect() {
