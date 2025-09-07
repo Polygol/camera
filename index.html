@@ -12,6 +12,7 @@
     <style>
         :root {
             --edge-refraction-filter: url('#edge-refraction-only');
+            --sun-shadow: 0 0 0 0 transparent;
             
             /* Dark Theme (Default) Variables */
             --background-color-dark: #1c1c1c;
@@ -181,6 +182,7 @@
             align-items: center;
             gap: 8px;
             backdrop-filter: blur(5px) saturate(2) var(--edge-refraction-filter);
+            box-shadow: var(--sun-shadow);
             border: 1px solid var(--glass-border);
         }
 
@@ -328,6 +330,7 @@
             align-items: center;
             cursor: pointer;
             backdrop-filter: blur(5px) saturate(2) var(--edge-refraction-filter);
+            box-shadow: var(--sun-shadow);
             font-size: 1.5rem;
         }
         
@@ -359,6 +362,7 @@
             cursor: pointer;
             transition: background-color 0.2s;
             backdrop-filter: blur(5px) saturate(2) var(--edge-refraction-filter);
+            box-shadow: var(--sun-shadow);
             font-size: 0.9rem;
         }
         
@@ -460,7 +464,7 @@
             width: 90%;
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(10px) saturate(2) var(--edge-refraction-filter);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--sun-shadow), 0 0 50px rgba(0, 0, 0, 0.2);
         }
         
         .preview-header {
@@ -504,6 +508,7 @@
             cursor: pointer;
             transition: background-color 0.2s;
             backdrop-filter: blur(5px) saturate(2) var(--edge-refraction-filter);
+            box-shadow: var(--sun-shadow);
             display: flex;
             align-items: center;
             gap: 8px;
