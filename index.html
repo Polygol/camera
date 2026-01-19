@@ -255,12 +255,6 @@
             font-size: 2rem;
         }
         
-        .control-btn:active {
-            transform: scale(0.96);
-            transition: all 0.1s cubic-bezier(0.2, 0, 0.38, 0.9);
-            filter: brightness(1.5);
-        }
-        
         /* Mode Selection */
         .mode-selection {
             display: none;
@@ -449,49 +443,6 @@
             cursor: pointer;
             font-weight: 500;
             margin-top: 15px;
-        }
-        
-        /* For clickable elements */
-        button, 
-        .control-btn,
-        .mode-btn,
-        .photo-item {
-           transform: scale(1);
-           transition: all 0.15s cubic-bezier(0.2, 0, 0.38, 0.9);
-        }
-        
-        /* Active effect */
-        button:active, 
-        .control-btn:active,
-        .mode-btn:active,
-        .photo-item:active {
-           transform: scale(0.96);
-           transition: all 0.1s cubic-bezier(0.2, 0, 0.38, 0.9);
-           filter: brightness(1.5);
-        }
-        
-        /* Reduce animations */
-        .reduce-animations * {
-           animation: none !important;
-           transition: opacity 0.3s ease !important;
-           transition-property: opacity !important;
-        }
-        
-        .reduce-animations button,
-        .reduce-animations .control-btn,
-        .reduce-animations .mode-btn,
-        .reduce-animations .photo-item {
-           transform: scale(1) !important;
-           transition: opacity 0.3s ease !important;
-        }
-        
-        .reduce-animations button:active,
-        .reduce-animations .control-btn:active,
-        .reduce-animations .mode-btn:active,
-        .reduce-animations .photo-item:active {
-           transform: scale(0.98) !important;
-           transition: none !important;
-           filter: brightness(1.5);
         }
         
         @media (max-width: 480px) {            
