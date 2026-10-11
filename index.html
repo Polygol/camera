@@ -25,6 +25,8 @@
             });
             return str;
         }
+        window.t = t;
+        window.getAppLanguage = getAppLanguage;
 
         function applyLanguage(langCode) {
             if (langCode) localStorage.setItem('language', langCode);
