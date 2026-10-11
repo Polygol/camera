@@ -1,4 +1,5 @@
-const LANG_EN_CAMERA = {
+// Polygol Camera Language Dictionary
+window.LANG_EN_CAMERA = {
     TITLE: "Camera",
     PHOTO: "Photo",
     VIDEO: "Video",
@@ -10,7 +11,7 @@ const LANG_EN_CAMERA = {
     FLASH_TITLE: "Flash"
 };
 
-const LANG_JP_CAMERA = {
+window.LANG_JP_CAMERA = {
     TITLE: "カメラ",
     PHOTO: "写真",
     VIDEO: "ビデオ",
@@ -22,7 +23,7 @@ const LANG_JP_CAMERA = {
     FLASH_TITLE: "フラッシュ"
 };
 
-const LANG_KO_CAMERA = {
+window.LANG_KO_CAMERA = {
     TITLE: "카메라",
     PHOTO: "사진",
     VIDEO: "비디오",
@@ -34,14 +35,19 @@ const LANG_KO_CAMERA = {
     FLASH_TITLE: "플래시"
 };
 
-const LANG_ZH_CAMERA = {
+window.LANG_ZH_CAMERA = {
     TITLE: "相机",
     PHOTO: "照片",
     VIDEO: "视频",
-    GALLERY: "相册",
-    ENABLE_CAMERA_PROMPT: "需要相机权限才能拍照",
+    GALLERY: "图库",
+    ENABLE_CAMERA_PROMPT: "拍照需要访问相机",
     ENABLE_CAMERA_BTN: "启用相机",
     FLIP_CAMERA_TITLE: "翻转相机",
     TAKE_PHOTO_TITLE: "拍照",
     FLASH_TITLE: "闪光灯"
 };
+
+var LANG_EN_CAMERA = window.LANG_EN_CAMERA;
+var LANG_JP_CAMERA = window.LANG_JP_CAMERA;
+var LANG_KO_CAMERA = window.LANG_KO_CAMERA;
+var LANG_ZH_CAMERA = window.LANG_ZH_CAMERA;
