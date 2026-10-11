@@ -1,4 +1,5 @@
 const LANG_EN_CAMERA = {
+    TITLE: "Camera",
     PHOTO: "Photo",
     VIDEO: "Video",
     GALLERY: "Gallery",
@@ -10,6 +11,7 @@ const LANG_EN_CAMERA = {
 };
 
 const LANG_JP_CAMERA = {
+    TITLE: "カメラ",
     PHOTO: "写真",
     VIDEO: "ビデオ",
     GALLERY: "ギャラリー",
@@ -20,29 +22,8 @@ const LANG_JP_CAMERA = {
     FLASH_TITLE: "フラッシュ"
 };
 
-const LANG_DE_CAMERA = {
-    PHOTO: "Foto",
-    VIDEO: "Video",
-    GALLERY: "Galerie",
-    ENABLE_CAMERA_PROMPT: "Kamerazugriff zum Aufnehmen von Fotos erforderlich",
-    ENABLE_CAMERA_BTN: "Kamera aktivieren",
-    FLIP_CAMERA_TITLE: "Kamera wechseln",
-    TAKE_PHOTO_TITLE: "Foto aufnehmen",
-    FLASH_TITLE: "Blitz"
-};
-
-const LANG_ES_CAMERA = {
-    PHOTO: "Foto",
-    VIDEO: "Video",
-    GALLERY: "Galería",
-    ENABLE_CAMERA_PROMPT: "Se necesita acceso a la cámara para tomar fotos",
-    ENABLE_CAMERA_BTN: "Habilitar cámara",
-    FLIP_CAMERA_TITLE: "Girar cámara",
-    TAKE_PHOTO_TITLE: "Tomar foto",
-    FLASH_TITLE: "Flash"
-};
-
 const LANG_KO_CAMERA = {
+    TITLE: "카메라",
     PHOTO: "사진",
     VIDEO: "비디오",
     GALLERY: "갤러리",
@@ -54,6 +35,7 @@ const LANG_KO_CAMERA = {
 };
 
 const LANG_ZH_CAMERA = {
+    TITLE: "相机",
     PHOTO: "照片",
     VIDEO: "视频",
     GALLERY: "相册",
